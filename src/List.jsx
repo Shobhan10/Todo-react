@@ -18,7 +18,11 @@ const List = ({ todoList, editTodo, deleteTodo }) => {
                   >
                     <FaEdit />
                   </button>
-                  <button type="button" className="delete-btn">
+                  <button
+                    type="button"
+                    className="delete-btn"
+                    onClick={() => deleteTodo(id)}
+                  >
                     <FaTrash />
                   </button>
                 </div>

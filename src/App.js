@@ -48,6 +48,12 @@ function App() {
     setIsEdit(true);
   }
 
+  function deleteTodo(id) {
+    myTodo = myTodo.filter((todo) => todo.id !== id);
+    localStorage.setItem("list", JSON.stringify(myTodo));
+    setTodoList(myTodo);
+  }
+
   return (
     <section className="section-center">
       <form className="grocery-form" onSubmit={handleSubmit}>
@@ -66,7 +72,7 @@ function App() {
           </button>
         </div>
       </form>
-      <List todoList={todoList} editTodo={editTodo} />
+      <List todoList={todoList} editTodo={editTodo} deleteTodo={deleteTodo} />
     </section>
   );
 }
