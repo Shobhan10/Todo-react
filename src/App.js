@@ -54,6 +54,12 @@ function App() {
     setTodoList(myTodo);
   }
 
+  function clearAll() {
+    myTodo = [];
+    setTodoList(myTodo);
+    localStorage.setItem("list", JSON.stringify(myTodo));
+  }
+
   return (
     <section className="section-center">
       <form className="grocery-form" onSubmit={handleSubmit}>
@@ -72,7 +78,12 @@ function App() {
           </button>
         </div>
       </form>
-      <List todoList={todoList} editTodo={editTodo} deleteTodo={deleteTodo} />
+      <List
+        todoList={todoList}
+        editTodo={editTodo}
+        deleteTodo={deleteTodo}
+        clearAll={clearAll}
+      />
     </section>
   );
 }
