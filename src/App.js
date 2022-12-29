@@ -16,15 +16,30 @@ function App() {
   const [input, setInput] = useState("");
   const [todoList, setTodoList] = useState(myTodo);
   const [isEdit, setIsEdit] = useState(false);
+  const [isAlert, setIsAlert] = useState(false);
+  const [alert, setAlert] = useState({});
 
   function handleSubmit(e) {
     e.preventDefault();
+
+    if (!input) {
+      setIsAlert(true);
+      setAlert({
+        msg: "Please Enter Value",
+        success: false,
+      });
+    }
 
     if (input && isEdit) {
       myTodo.forEach((todo) => {
         if (todo.id === editObj.id) {
           todo.title = input;
         }
+      });
+      setIsAlert(true);
+      setAlert({
+        msg: "Value Changed",
+        success: true,
       });
     }
 
@@ -33,8 +48,16 @@ function App() {
         id: Date.now(),
         title: input.trim(),
       });
+      setIsAlert(true);
+      setAlert({
+        msg: "Item Added To The List",
+        success: true,
+      });
     }
 
+    setTimeout(() => {
+      setIsAlert(false);
+    }, 3000);
     setInput("");
     setTodoList(myTodo);
     setIsEdit(false);
@@ -52,18 +75,36 @@ function App() {
     myTodo = myTodo.filter((todo) => todo.id !== id);
     localStorage.setItem("list", JSON.stringify(myTodo));
     setTodoList(myTodo);
+
+    setIsAlert(true);
+    setAlert({
+      msg: "Item Removed",
+      success: false,
+    });
+    setTimeout(() => {
+      setIsAlert(false);
+    }, 3000);
   }
 
   function clearAll() {
     myTodo = [];
     setTodoList(myTodo);
     localStorage.setItem("list", JSON.stringify(myTodo));
+
+    setIsAlert(true);
+    setAlert({
+      msg: "Empty List",
+      success: false,
+    });
+    setTimeout(() => {
+      setIsAlert(false);
+    }, 3000);
   }
 
   return (
     <section className="section-center">
       <form className="grocery-form" onSubmit={handleSubmit}>
-        {/* <Alert /> */}
+        {isAlert && <Alert {...alert} />}
         <h3>Grocery Bud</h3>
         <div className="form-control">
           <input

@@ -1,8 +1,8 @@
-const Alert = () => {
+const Alert = ({ msg, success }) => {
   return (
-    <div>
-      <h2 className="alert">Alert</h2>
-    </div>
+    <p className={`alert ${success ? "alert-success" : "alert-danger"}`}>
+      {msg}
+    </p>
   );
 };
 
