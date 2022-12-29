@@ -119,12 +119,18 @@ function App() {
           </button>
         </div>
       </form>
-      <List
-        todoList={todoList}
-        editTodo={editTodo}
-        deleteTodo={deleteTodo}
-        clearAll={clearAll}
-      />
+      {todoList.length > 0 && (
+        <div className="grocery-container">
+          <List
+            todoList={todoList}
+            editTodo={editTodo}
+            deleteTodo={deleteTodo}
+          />
+          <button className="clear-btn" onClick={clearAll}>
+            Clear items
+          </button>
+        </div>
+      )}
     </section>
   );
 }
