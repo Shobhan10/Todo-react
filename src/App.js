@@ -1,20 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Alert from "./Alert";
 import List from "./List";
 
-let myTodo = [];
-const previousTodo = JSON.parse(localStorage.getItem("list"));
-if (!previousTodo.length) {
-  myTodo = [];
-} else {
-  myTodo = previousTodo;
+function getStoredData() {
+  const list = localStorage.getItem("list");
+  if (!list.length) {
+    return [];
+  } else {
+    return JSON.parse(list);
+  }
 }
 
 let editObj = {};
 
 function App() {
   const [input, setInput] = useState("");
-  const [todoList, setTodoList] = useState(myTodo);
+  const [todoList, setTodoList] = useState(getStoredData());
   const [isEdit, setIsEdit] = useState(false);
   const [isAlert, setIsAlert] = useState(false);
   const [alert, setAlert] = useState({});
@@ -31,7 +32,7 @@ function App() {
     }
 
     if (input && isEdit) {
-      myTodo.forEach((todo) => {
+      todoList.forEach((todo) => {
         if (todo.id === editObj.id) {
           todo.title = input;
         }
@@ -44,10 +45,11 @@ function App() {
     }
 
     if (input && !isEdit) {
-      myTodo.push({
+      const newItem = {
         id: Date.now(),
         title: input.trim(),
-      });
+      };
+      setTodoList([...todoList, newItem]);
       setIsAlert(true);
       setAlert({
         msg: "Item Added To The List",
@@ -59,10 +61,7 @@ function App() {
       setIsAlert(false);
     }, 3000);
     setInput("");
-    setTodoList(myTodo);
     setIsEdit(false);
-
-    localStorage.setItem("list", JSON.stringify(myTodo));
   }
 
   function editTodo({ id, title }) {
@@ -72,9 +71,7 @@ function App() {
   }
 
   function deleteTodo(id) {
-    myTodo = myTodo.filter((todo) => todo.id !== id);
-    localStorage.setItem("list", JSON.stringify(myTodo));
-    setTodoList(myTodo);
+    setTodoList(todoList.filter((todo) => todo.id !== id));
 
     setIsAlert(true);
     setAlert({
@@ -87,9 +84,7 @@ function App() {
   }
 
   function clearAll() {
-    myTodo = [];
-    setTodoList(myTodo);
-    localStorage.setItem("list", JSON.stringify(myTodo));
+    setTodoList([]);
 
     setIsAlert(true);
     setAlert({
@@ -100,6 +95,10 @@ function App() {
       setIsAlert(false);
     }, 3000);
   }
+
+  useEffect(() => {
+    localStorage.setItem("list", JSON.stringify(todoList));
+  }, [todoList]);
 
   return (
     <section className="section-center">
