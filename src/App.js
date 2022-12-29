@@ -105,7 +105,7 @@ function App() {
     <section className="section-center">
       <form className="grocery-form" onSubmit={handleSubmit}>
         {isAlert && <Alert {...alert} />}
-        <h3>Grocery Bud</h3>
+        <h3>Todo App</h3>
         <div className="form-control">
           <input
             type="text"
