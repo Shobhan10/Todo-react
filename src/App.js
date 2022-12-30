@@ -28,18 +28,14 @@ function App() {
 
     if (!input) {
       showAlert(true, "Please Enter Value", "danger");
-    }
-
-    if (input && isEdit) {
+    } else if (input && isEdit) {
       todoList.forEach((todo) => {
         if (todo.id === editObj.id) {
           todo.title = input;
         }
       });
       showAlert(true, "Value Changed", "success");
-    }
-
-    if (input && !isEdit) {
+    } else {
       const newItem = {
         id: Date.now(),
         title: input.trim(),
@@ -72,10 +68,22 @@ function App() {
     localStorage.setItem("list", JSON.stringify(todoList));
   }, [todoList]);
 
+  // In this way we can hide the alert here also
+
+  /* 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      showAlert();
+    }, 3000);
+    return () => clearTimeout(timeout);
+  }, [todoList, alert]) */
+
   return (
     <section className="section-center">
       <form className="grocery-form" onSubmit={handleSubmit}>
-        {alert.show && <Alert {...alert} hideAlert={showAlert} />}
+        {alert.show && (
+          <Alert {...alert} hideAlert={showAlert} todoList={todoList} />
+        )}
         <h3>Todo App</h3>
         <div className="form-control">
           <input
