@@ -17,18 +17,17 @@ function App() {
   const [input, setInput] = useState("");
   const [todoList, setTodoList] = useState(getStoredData());
   const [isEdit, setIsEdit] = useState(false);
-  const [isAlert, setIsAlert] = useState(false);
-  const [alert, setAlert] = useState({});
+  const [alert, setAlert] = useState({ show: false, msg: "", type: "" });
+
+  function showAlert(show = false, msg = "", type = "") {
+    setAlert({ show, msg, type });
+  }
 
   function handleSubmit(e) {
     e.preventDefault();
 
     if (!input) {
-      setIsAlert(true);
-      setAlert({
-        msg: "Please Enter Value",
-        success: false,
-      });
+      showAlert(true, "Please Enter Value", "danger");
     }
 
     if (input && isEdit) {
@@ -37,11 +36,7 @@ function App() {
           todo.title = input;
         }
       });
-      setIsAlert(true);
-      setAlert({
-        msg: "Value Changed",
-        success: true,
-      });
+      showAlert(true, "Value Changed", "success");
     }
 
     if (input && !isEdit) {
@@ -50,16 +45,9 @@ function App() {
         title: input.trim(),
       };
       setTodoList([...todoList, newItem]);
-      setIsAlert(true);
-      setAlert({
-        msg: "Item Added To The List",
-        success: true,
-      });
+      showAlert(true, "Item Added To The List", "success");
     }
 
-    setTimeout(() => {
-      setIsAlert(false);
-    }, 3000);
     setInput("");
     setIsEdit(false);
   }
@@ -72,28 +60,12 @@ function App() {
 
   function deleteTodo(id) {
     setTodoList(todoList.filter((todo) => todo.id !== id));
-
-    setIsAlert(true);
-    setAlert({
-      msg: "Item Removed",
-      success: false,
-    });
-    setTimeout(() => {
-      setIsAlert(false);
-    }, 3000);
+    showAlert(true, "Item Removed", "danger");
   }
 
   function clearAll() {
     setTodoList([]);
-
-    setIsAlert(true);
-    setAlert({
-      msg: "Empty List",
-      success: false,
-    });
-    setTimeout(() => {
-      setIsAlert(false);
-    }, 3000);
+    showAlert(true, "Empty List", "danger");
   }
 
   useEffect(() => {
@@ -103,7 +75,7 @@ function App() {
   return (
     <section className="section-center">
       <form className="grocery-form" onSubmit={handleSubmit}>
-        {isAlert && <Alert {...alert} />}
+        {alert.show && <Alert {...alert} hideAlert={showAlert} />}
         <h3>Todo App</h3>
         <div className="form-control">
           <input
