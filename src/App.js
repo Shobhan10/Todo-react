@@ -4,10 +4,10 @@ import List from "./List";
 
 function getStoredData() {
   const list = localStorage.getItem("list");
-  if (!list.length) {
-    return [];
-  } else {
+  if (list) {
     return JSON.parse(list);
+  } else {
+    return [];
   }
 }
 
